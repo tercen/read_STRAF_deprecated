@@ -1,9 +1,9 @@
 {
-  "name": "Median",
-  "description": "Return the medium value of a cell",
-  "tags": ["basic statistics"],
+  "name": "STRAF to Tercen",
+  "description": "Import a STRAF input file into Tercen",
+  "tags": ["file conversion"],
   "authors": ["tercen"],
-  "urls": ["https://github.com/tercen/template_operator"],
+  "urls": ["https://github.com/tercen/straf2tercen_operator"],
   "properties": []
 }
 

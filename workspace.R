@@ -1,8 +1,8 @@
 library(tercen)
 library(dplyr)
 
-options("tercen.workflowId" = "wwww")
-options("tercen.stepId"     = "dddd")
+options("tercen.workflowId" = "b5eee6b1ed83d50347d04d6ba20a0f29")
+options("tercen.stepId"     = "53ebc609-5f25-4cdd-9930-4ef5efb29c1b")
  
 is.POSIXct <- function(x) inherits(x, "POSIXct")
 
@@ -15,9 +15,9 @@ straf_to_tercen = function(df){
   straf_in <- strsplit(straf_in, "\t")
   straf <- do.call("rbind", straf_in)
 
-  headr <- dc[1, -1:-2]
-  clsid <- dc[-1, 1:2]
-  geno <- dc[-1, -1:-2]
+  headr <- straf[1, -1:-2]
+  clsid <- straf[-1, 1:2]
+  geno <- straf[-1, -1:-2]
 
   df_o <- list()
   for(i in 1:nrow(clsid)) {
@@ -33,7 +33,8 @@ straf_to_tercen = function(df){
     mutate_if(is.logical, as.character) %>%
     mutate_if(is.integer, as.double) %>%
     mutate(.ci= rep_len(df$.ci[1], nrow(.)))
-  return(straf_to_tercen)
+  
+  return(straf_long)
 }
  
 ctx = tercenCtx()
