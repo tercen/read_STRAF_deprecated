@@ -1,50 +1,84 @@
 library(tercen)
 library(dplyr)
+library(tidyr)
 
 options("tercen.workflowId" = "b5eee6b1ed83d50347d04d6ba20a0f29")
 options("tercen.stepId"     = "53ebc609-5f25-4cdd-9930-4ef5efb29c1b")
  
 is.POSIXct <- function(x) inherits(x, "POSIXct")
 
-straf_to_tercen = function(df){
-  filename = tempfile()
-  writeBin(ctx$client$fileService$download(df$documentId[1]), filename)
-  on.exit(unlink(filename))
+straf2freqtab <- function(df) {
   
-  straf_in <- readLines(filename)
-  straf_in <- strsplit(straf_in, "\t")
-  straf <- do.call("rbind", straf_in)
-
-  headr <- straf[1, -1:-2]
-  clsid <- straf[-1, 1:2]
-  geno <- straf[-1, -1:-2]
-
-  df_o <- list()
-  for(i in 1:nrow(clsid)) {
-    df_o[[i]] <- data.frame(
-      sample = clsid[i, 1],
-      population = clsid[i, 2],
-      locus = headr,
-      genotype = geno[i, ]
+    filename <- tempfile()
+    writeBin(ctx$client$fileService$download(df$documentId[1]), filename)
+    on.exit(unlink(filename))
+    
+    dat <- readLines(filename)
+    dat <- strsplit(dat, "[\t]")
+    
+    mat <- matrix(
+      unlist(dat),
+      nrow = length(dat),
+      ncol = length(dat[[1]]),
+      byrow = TRUE
     )
-  }
-  straf_long <- do.call(rbind, df_o) %>%
-    mutate_if(is.POSIXct, as.character) %>%
-    mutate_if(is.logical, as.character) %>%
-    mutate_if(is.integer, as.double) %>%
-    mutate(.ci= rep_len(df$.ci[1], nrow(.)))
-  
-  return(straf_long)
+    mat[mat == "0"] <- NA ###
+    colnames(mat) <- mat[1, ]
+    rownames(mat) <- mat[, 1]
+    mat <- mat[-1, ]
+    loci <- unique(colnames(mat[, -1:-2]))
+    freqTAB <- NULL
+    mat2 <- sub("[.]", "-", mat)
+    
+    for(i in 1:length(loci)) {
+      
+      ids <- which(colnames(mat) == loci[i])
+      alleles <- unique(c(mat[, ids]))
+      alleles <- sub("[.]", "-", alleles)
+      alleles <- alleles[!is.na(alleles)] ###
+      nameCol <- paste(loci[i], ".", alleles, sep = "")
+      
+      newmat <- matrix(
+        NA,
+        ncol = length(nameCol),
+        nrow = dim(mat)[1]
+      )
+      
+      for(ii in 1:length(alleles)) {
+        newmat[,ii] <- apply(mat2[,ids]==alleles[ii],1,sum)
+        colnames(newmat) <- nameCol
+      }
+      
+      freqTAB <- cbind(freqTAB, newmat)
+    }
+    
+    rownames(freqTAB) <- mat[, 1]
+    colnames(freqTAB) <- sub(" ", "", colnames(freqTAB))
+    freqTAB <- as.data.frame(freqTAB)
+    freqTAB$population <- mat[, "pop"]
+    freqTAB$sample <- mat[, 1]
+    
+    freqTAB <- freqTAB %>% 
+      as.data.frame() %>%
+      gather(key = "allele", value = "frequency", -sample, -population) %>%
+      mutate(loc_allele = allele) %>%
+      separate(allele, c("locus", "allele"), "\\.", extra = "merge", remove = FALSE) %>%
+      mutate_if(is.POSIXct, as.character) %>%
+      mutate_if(is.logical, as.character) %>%
+      mutate_if(is.integer, as.double) %>%
+      mutate(.ci= rep_len(df$.ci[1], nrow(.)))
+    
+    return(freqTAB)
 }
- 
+
 ctx = tercenCtx()
 
 if (!any(ctx$cnames == "documentId")) stop("Column factor documentId is required") 
  
-ctx$cselect() %>% 
+df <- ctx$cselect() %>% 
   mutate(.ci= 1:nrow(.)-1) %>%
   split(.$.ci) %>%
-  lapply(straf_to_tercen) %>%
+  lapply(straf2freqtab) %>%
   bind_rows() %>%
   ctx$addNamespace() %>%
   ctx$save()
