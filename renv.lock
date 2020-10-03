@@ -169,6 +169,13 @@
       "Repository": "CRAN",
       "Hash": "ff31d958a041593f58ba04fc637d90dd"
     },
+    "stringi": {
+      "Package": "stringi",
+      "Version": "1.4.5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "ced3b63472796155f74abc4eb5266c78"
+    },
     "teRcenHttp": {
       "Package": "teRcenHttp",
       "Version": "1.0.15",
@@ -189,6 +196,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "8248ee35d1e15d1e506f05f5a5d46a75"
+    },
+    "tidyr": {
+      "Package": "tidyr",
+      "Version": "0.8.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "066365650c48620e116631c98ae8daf3"
     },
     "tidyselect": {
       "Package": "tidyselect",
