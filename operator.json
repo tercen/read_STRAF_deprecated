@@ -3,7 +3,7 @@
   "description": "Import a STRAF input file into Tercen",
   "tags": ["file conversion"],
   "authors": ["tercen"],
-  "urls": ["https://github.com/tercen/straf2tercen_operator"],
+  "urls": ["https://github.com/tercen/read_STRAF_operator"],
   "properties": []
 }
 
