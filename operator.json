@@ -1,7 +1,7 @@
 {
-  "name": "STRAF to Tercen",
-  "description": "Import a STRAF input file into Tercen",
-  "tags": ["file conversion"],
+  "name": "STRAF",
+  "description": "Import an STR Analysis Forensics file (.txt)",
+  "tags": ["file conversion","import"],
   "authors": ["tercen"],
   "urls": ["https://github.com/tercen/read_STRAF_operator"],
   "properties": []
