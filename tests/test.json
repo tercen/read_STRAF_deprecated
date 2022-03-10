@@ -1,0 +1,14 @@
+{
+  "kind": "OperatorUnitTest",
+  "name": "read fasta",
+  "namespace": "ds7",
+  "inputFileUris": ["input-STRAF-msat-res-sans-P13-pooled.txt"],
+  "inputDataUri": "input.csv",
+  "outputDataUri": ["table1.csv","table2.csv"],
+  "columns": ["documentId"],
+  "rows": [],
+  "colors": [],
+  "labels": [],
+  "yAxis": "",
+  "xAxis": ""
+}
