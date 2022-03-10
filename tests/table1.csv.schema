@@ -1,0 +1,40 @@
+{
+  "kind": "TableSchema",
+  "columns": [
+    {
+      "kind": "ColumnSchema",
+      "name": "ds7.population",
+      "type": "string"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "ds7.sample",
+      "type": "string"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "ds7.frequency",
+      "type": "integer"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "ds7.locus",
+      "type": "string"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "ds7.allele",
+      "type": "string"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "ds7.loc_allele",
+      "type": "string"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": ".ci",
+      "type": "int32"
+    }
+    ]
+}
