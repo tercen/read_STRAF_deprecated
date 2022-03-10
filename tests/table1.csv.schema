@@ -14,7 +14,7 @@
     {
       "kind": "ColumnSchema",
       "name": "ds7.frequency",
-      "type": "integer"
+      "type": "number"
     },
     {
       "kind": "ColumnSchema",
